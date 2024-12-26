@@ -15,6 +15,7 @@ class User(BaseDatetimeModel):
     name = Column("name", VARCHAR(255), nullable=False)
     about = Column("about", VARCHAR(255), nullable=True)
     avatar_url = Column("avatar_url", TEXT, nullable=False)
+    telegram_short_link = Column("telegram_short_link", TEXT, nullable=True)
 
     spotify_login = Column("spotify_login", TEXT, nullable=False)
     spotify_password = Column("spotify_password", TEXT, nullable=False)
