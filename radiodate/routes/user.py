@@ -29,5 +29,5 @@ async def profile(telegram_id: int, body: UserUpdateView = Body(...)):
         if not user:
             raise HTTPException(status_code=404, detail="User not found")
 
-        await User.update(telegram_id=telegram_id, body=body)
+        await User.update(user_id=user.id, body=body)
     return

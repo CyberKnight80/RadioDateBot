@@ -48,10 +48,6 @@ class User(BaseDatetimeModel):
         await db_session.get().execute(query)
 
     @classmethod
-    async def update(cls, telegram_id: int, body: UserUpdateView):
-        query = (
-            update(cls)
-            .where(cls.telegram_id == telegram_id)
-            .values(telegram_id=telegram_id, **body.model_dump())
-        )
+    async def update(cls, user_id: int, body: UserUpdateView):
+        query = update(cls).where(cls.id == user_id).values(**body.model_dump())
         await db_session.get().execute(query)
