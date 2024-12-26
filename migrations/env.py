@@ -3,6 +3,7 @@ from alembic import context
 from sqlalchemy import create_engine
 
 from radiodate.models.user import BaseDatetimeModel, User
+from radiodate.models.like import Like
 
 from radiodate.settings import get_settings
 from radiodate.db.base import Base

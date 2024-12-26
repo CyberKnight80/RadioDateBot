@@ -10,6 +10,7 @@ class UserView(BaseModel):
     name: str | None = None
     about: str | None = None
     avatar_url: str | None = None
+    telegram_short_link: str | None = None
 
 
 class UserUpdateView(BaseModel):
