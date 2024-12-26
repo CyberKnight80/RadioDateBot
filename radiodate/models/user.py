@@ -25,7 +25,7 @@ class User(BaseDatetimeModel):
         stmt = select(cls).order_by(func.random()).limit(1)
         result = await db_session.get().execute(stmt)
         random_row = result.scalars().first()
-        return UserView.model_validate(random_row)
+        return UserView.model_validate(random_row.as_dict())
 
     @classmethod
     async def get_by_telegram_id(cls, telegram_id: int) -> UserView | None:

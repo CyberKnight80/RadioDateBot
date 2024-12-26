@@ -12,6 +12,9 @@ class UserView(BaseModel):
     avatar_url: str | None = None
     telegram_short_link: str | None = None
 
+    class Config:
+        orm_mode = True
+
 
 class UserUpdateView(BaseModel):
     name: str | None = None
