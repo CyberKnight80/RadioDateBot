@@ -1,10 +1,12 @@
 from http.client import HTTPException
 
+
 from fastapi import APIRouter, HTTPException, Depends, Body
 
 from radiodate.db.connection import Transaction
 from radiodate.models.like import Like
 from radiodate.models.user import User
+from radiodate.music.match import MatchMan
 from radiodate.schemas.user import UserView, UserUpdateView
 
 router = APIRouter(prefix="/user", tags=["user"])
@@ -53,3 +55,29 @@ async def next_profile(telegram_id: int):
             victim = await User.get_random_user()
 
         return victim
+
+
+@router.get("/{telegram_id}/{other_telegram_id}", status_code=200)
+async def match_data(telegram_id: int, other_telegram_id: int):
+    async with Transaction():
+        user = await User.get_by_telegram_id(telegram_id=telegram_id)
+        other_user = await User.get_by_telegram_id(telegram_id=other_telegram_id)
+
+        if not user or not other_user:
+            raise HTTPException(status_code=404, detail="User not found")
+
+        user_with_token = await User.get(value=user.id)
+        other_user_with_token = await User.get(value=other_user.id)
+
+        if (
+            not user_with_token.yandex_music_token
+            or not other_user_with_token.yandex_music_token
+        ):
+            raise HTTPException(
+                status_code=400, detail="Someone don't using yandex music"
+            )
+        m = MatchMan(
+            first_token=user_with_token.yandex_music_token,
+            second_token=other_user_with_token.yandex_music_token,
+        )
+        return m.get_data()
