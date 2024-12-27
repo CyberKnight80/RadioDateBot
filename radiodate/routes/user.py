@@ -48,27 +48,16 @@ async def next_profile(telegram_id: int):
         if matches:
             love = await User.get(value=matches)
             await Like.delete_match(user_id=user.id, matched_user_id=love.id)
-            return {"status": "match", "user": UserView.model_validate(love.as_dict())}
+            u = UserView.model_validate(love.as_dict())
+            u.is_matched = True
+            return u
 
         victim = await User.get_random_user()
         while victim.telegram_id == user.telegram_id:
             victim = await User.get_random_user()
 
-        return victim
-
-
-@router.get("/{telegram_id}/{other_telegram_id}", status_code=200)
-async def match_data(telegram_id: int, other_telegram_id: int):
-    async with Transaction():
-        user = await User.get_by_telegram_id(telegram_id=telegram_id)
-        other_user = await User.get_by_telegram_id(telegram_id=other_telegram_id)
-
-        if not user or not other_user:
-            raise HTTPException(status_code=404, detail="User not found")
-
         user_with_token = await User.get(value=user.id)
-        other_user_with_token = await User.get(value=other_user.id)
-
+        other_user_with_token = await User.get(value=victim.id)
         if (
             not user_with_token.yandex_music_token
             or not other_user_with_token.yandex_music_token
@@ -80,4 +69,9 @@ async def match_data(telegram_id: int, other_telegram_id: int):
             first_token=user_with_token.yandex_music_token,
             second_token=other_user_with_token.yandex_music_token,
         )
-        return m.get_data()
+        match_data = m.get_data()
+        u = UserView.model_validate(victim)
+        u.album_cover_url = match_data["album_cover_url"]
+        u.match_percent = match_data["match_percent"]
+
+        return u

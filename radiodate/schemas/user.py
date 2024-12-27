@@ -12,6 +12,10 @@ class UserView(BaseModel):
     avatar_url: str | None = None
     telegram_short_link: str | None = None
 
+    album_cover_url: str | None = None
+    match_percent: str | None = None
+    is_matched: bool = False
+
     class Config:
         orm_mode = True
 
