@@ -14,14 +14,12 @@ class Like(BaseModel):
         sa.ForeignKey("users.id", ondelete="CASCADE"),
         nullable=False,
         default=uuid.uuid4,
-        unique=True,
     )
     liked = sa.Column(
         UUID(as_uuid=True),
         sa.ForeignKey("users.id", ondelete="CASCADE"),
         nullable=False,
         default=uuid.uuid4,
-        unique=True,
     )
 
     @classmethod
