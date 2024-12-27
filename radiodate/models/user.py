@@ -17,8 +17,7 @@ class User(BaseDatetimeModel):
     avatar_url = Column("avatar_url", TEXT, nullable=False)
     telegram_short_link = Column("telegram_short_link", TEXT, nullable=True)
 
-    spotify_login = Column("spotify_login", TEXT, nullable=False)
-    spotify_password = Column("spotify_password", TEXT, nullable=False)
+    yandex_music_token = Column("yandex_music_token", TEXT, nullable=True)
 
     @classmethod
     async def get_random_user(cls) -> UserView:
@@ -43,8 +42,7 @@ class User(BaseDatetimeModel):
             name="",
             about="",
             avatar_url="",
-            spotify_login="",
-            spotify_password="",
+            yandex_music_token="",
         )
         await db_session.get().execute(query)
 

@@ -3,6 +3,7 @@ import asyncio
 import uvicorn
 from aiogram import Dispatcher, Bot
 from fastapi import FastAPI
+from starlette.middleware.cors import CORSMiddleware
 
 from radiodate.routes import user_router
 from radiodate.routes import like_router
@@ -14,6 +15,14 @@ app = FastAPI()
 
 app.include_router(user_router)
 app.include_router(like_router)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 bot = Bot(token=get_settings().TELEGRAM_API_TOKEN)
 dp = Dispatcher()
