@@ -53,8 +53,10 @@ async def next_profile(telegram_id: int):
             return u
 
         victim = await User.get_random_user()
-        while victim.telegram_id == user.telegram_id:
+        rel = await Like.get_rel(user.id, victim.id)
+        while (victim.telegram_id == user.telegram_id) or (rel is not None):
             victim = await User.get_random_user()
+            rel = await Like.get_rel(user.id, victim.id)
 
         user_with_token = await User.get(value=user.id)
         other_user_with_token = await User.get(value=victim.id)

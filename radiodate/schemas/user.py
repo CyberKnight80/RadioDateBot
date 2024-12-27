@@ -13,7 +13,7 @@ class UserView(BaseModel):
     telegram_short_link: str | None = None
 
     album_cover_url: str | None = None
-    match_percent: str | None = None
+    match_percent: float | None = None
     is_matched: bool = False
 
     class Config:
